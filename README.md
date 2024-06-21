@@ -5,7 +5,7 @@
 - 2 Insert token into `bottken.txt`
 - 3`Run main.bat`
 
-###Multiple tokens supported(N/A)
+### Multiple tokens supported(N/A)
 - DMspam        (A)
 - Channeldelete (N)
 - CreateChannel (N)
