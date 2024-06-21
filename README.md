@@ -1,9 +1,9 @@
 # discord bot nuker
 
 ### Getting Started
-- 1`Run setup.bat`
-- 2 Insert token into `bottken.txt`
-- 3`Run main.bat`
+- 1.Run`setup.bat`
+- 2.Insert token into `bottken.txt`
+- 3.Run`main.bat`
 
 ### Multiple tokens supported(N/A)
 - DMspam        (A)
