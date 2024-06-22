@@ -29,20 +29,32 @@ async def send_direct_messages(session, token, user_id, message, count):
                 message_payload = {
                     'content': message
                 }
-                for _ in range(count):
+                sent_count = 0
+                error_count = 0
+                while sent_count < count and error_count < 20:
                     async with session.post(message_url, headers=headers, json=message_payload) as msg_response:
                         if msg_response.status == 200:
                             print(f'メッセージを送信しました。')
+                            sent_count += 1
+                            error_count = 0  # エラーカウントをリセット
                         else:
                             print(f'メッセージ送信に失敗しました: {msg_response.status}')
+                            error_count += 1
+                
+                if error_count >= 20:
+                    return False
             else:
                 print(f'チャンネル作成に失敗しました: {response.status}')
+                return False
     except Exception as e:
         print(f'エラーが発生しました: {e}')
+        return False
+    return True
 
 async def start_bot(token, user_id, message, count):
     async with aiohttp.ClientSession() as session:
-        await send_direct_messages(session, token, user_id, message, count)
+        success = await send_direct_messages(session, token, user_id, message, count)
+        return success
 
 # コンソールから入力を受け取る
 user_id = int(input('ユーザーIDを入力してください: '))
@@ -56,10 +68,12 @@ with open('bottoken.txt', 'r') as file:
 # 各トークンでBotを非同期に起動
 loop = asyncio.get_event_loop()
 tasks = [start_bot(token, user_id, message, count) for token in tokens]
-loop.run_until_complete(asyncio.gather(*tasks))
+results = loop.run_until_complete(asyncio.gather(*tasks))
 
-# コンソールの文字をすべて削除
-os.system('cls' if os.name == 'nt' else 'clear')
+# エラーが連続で20回発生した場合、プログラムを終了
+if False in results:
+    # コンソールの文字をすべて削除
+    os.system('cls' if os.name == 'nt' else 'clear')
 
-# cat.pyを同じコンソールで実行
-subprocess.run(['python', 'main.py'])
+    # main.pyを同じコンソールで実行
+    subprocess.run(['python', 'main.py'])
