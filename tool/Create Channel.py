@@ -23,6 +23,7 @@ async def on_ready():
     
     # サーバーID、チャンネル名、チャンネル数を入力させる
     server_id = int(input("サーバーIDを入力してください: "))
+    channel_type = input("作成するチャンネルの種類を選択してください (1: ボイスチャンネル, 2: テキストチャンネル): ")
     channel_name = input("作成するチャンネル名を入力してください: ")
     channel_count = int(input("作成するチャンネル数を入力してください: "))
 
@@ -33,7 +34,14 @@ async def on_ready():
         return
 
     # チャンネル作成タスクを並行処理で実行
-    tasks = [guild.create_text_channel(f'{channel_name}-{i+1}') for i in range(channel_count)]
+    if channel_type == '1':
+        tasks = [guild.create_voice_channel(f'{channel_name}-{i+1}') for i in range(channel_count)]
+    elif channel_type == '2':
+        tasks = [guild.create_text_channel(f'{channel_name}-{i+1}') for i in range(channel_count)]
+    else:
+        print("無効な入力です。")
+        return
+
     await asyncio.gather(*tasks)
 
     print("すべてのチャンネルが作成されました。")
