@@ -1,3 +1,5 @@
+
+# ※2024/08/15 Error correction in progress
 # discord bot nuker
 
 ### Getting Started
